@@ -79,6 +79,25 @@ func saramaClientConfig(opts *options.Options) *sarama.Config {
 		log.Debug("Sarama client config has been set for scram256")
 		clientConfig.Net.SASL.SCRAMClientGeneratorFunc = func() sarama.SCRAMClient { return &xdgSCRAMClient{HashGeneratorFcn: scramSha256} }
 		clientConfig.Net.SASL.Mechanism = sarama.SASLMechanism(sarama.SASLTypeSCRAMSHA256)
+	} else if opts.SASLMechanism == "SASLTypeGSSAPI" {
+		log.Debug("Sarama client config has been set for Kerberos Auth")
+		clientConfig.Net.SASL.Mechanism = sarama.SASLMechanism(sarama.SASLTypeGSSAPI)
+                clientConfig.Net.SASL.GSSAPI.AuthType = sarama.KRB5_KEYTAB_AUTH
+		if opts.SASLKRBKeyTab != "" {
+			clientConfig.Net.SASL.GSSAPI.KeyTabPath = opts.SASLKRBKeyTab
+		}
+		if opts.SASLServiceName != "" {
+			clientConfig.Net.SASL.GSSAPI.ServiceName = opts.SASLServiceName
+		}
+		if opts.KerberosConfigPath != "" {
+			clientConfig.Net.SASL.GSSAPI.KerberosConfigPath = opts.KerberosConfigPath
+		}
+		if opts.KerberosRealm != "" {
+			clientConfig.Net.SASL.GSSAPI.Realm = opts.KerberosRealm
+		}
+		if opts.KerberosUsername != "" {
+			clientConfig.Net.SASL.GSSAPI.Username = opts.KerberosUsername
+		}
 	} else {
 		//PLAIN TEXT mode
 	}

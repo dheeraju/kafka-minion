@@ -33,7 +33,7 @@ type Options struct {
 	// TLSCertFilePath - Path to the TLS cert file
 	// TLSInsecureSkipTLSVerify - If InsecureSkipVerify is true, TLS accepts any certificate presented by the server and any host name in that certificate.
 	// TLSPassphrase - Passphrase to decrypt the TLS Key
-	// SASLMechanism - Default to empty : set to SCRAM-SHA-256 or SCRAM-SHA-512 for scram usage
+	// SASLMechanism - Default to empty : set to SCRAM-SHA-256 or SCRAM-SHA-512 for scram usage or SASLTypeGSSAPI for Kerberos
 	KafkaBrokers             []string      `envconfig:"KAFKA_BROKERS" required:"true"`
 	KafkaVersion             string        `envconfig:"KAFKA_VERSION" default:"1.0.0"`
 	OffsetRetention          time.Duration `envconfig:"KAFKA_OFFSET_RETENTION" default:"168h"` // 7d default
@@ -43,6 +43,13 @@ type Options struct {
 	UseSASLHandshake         bool          `envconfig:"KAFKA_SASL_USE_HANDSHAKE" default:"true"`
 	SASLUsername             string        `envconfig:"KAFKA_SASL_USERNAME"`
 	SASLPassword             string        `envconfig:"KAFKA_SASL_PASSWORD"`
+	SASLGSSAPIAuthType       string        `envconfig:"KAFKA_SASL_GSSAPI_AuthType" default:"KRB5_KEYTAB_AUTH"`
+	SASLKRBKeyTab            string        `envconfig:"KERBEROS_KEY_TAB"`
+	SASLKRBAuth              string        `envconfig:"KERBEROS_AUTH"`
+	SASLServiceName          string        `envconfig:"KERBEROS_SERVICENAME"`
+	KerberosConfigPath       string        `envconfig:"KERBEROS_CONFIG"`
+	KerberosRealm            string        `envconfig:"KERBEROS_REALM"`
+	KerberosUsername         string        `envconfig:"KERBEROS_USERNAME"`
 	TLSEnabled               bool          `envconfig:"KAFKA_TLS_ENABLED" default:"false"`
 	TLSCAFilePath            string        `envconfig:"KAFKA_TLS_CA_FILE_PATH"`
 	TLSKeyFilePath           string        `envconfig:"KAFKA_TLS_KEY_FILE_PATH"`
